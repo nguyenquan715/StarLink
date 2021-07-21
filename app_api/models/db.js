@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 /* Connect to mongoDB */
-const dbURI = 'mongodb://localhost/StarLink';
+const dbURI = 'mongodb://localhost/Loc8r';
 mongoose.connect(dbURI, {useNewUrlParser: true});
 
 /* Listen connection events*/
