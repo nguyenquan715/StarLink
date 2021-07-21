@@ -2,7 +2,17 @@ const mongoose = require('mongoose');
 const Loc = mongoose.model('Location');
 
 const createReview = (req, res) => {
-    
+    Loc
+        .findById(req.params.locationId)
+        .select('reviews')
+        .exec((err, location) => {
+            if(!location){
+                return res.status(404).json({message: 'Location not found!'});
+            } else if(err){
+                return res.status(404).json(err);
+            }
+            doAddReview(req, res, location);
+        });
 };
 
 const getReviewById = (req, res) => {
@@ -40,6 +50,23 @@ const updateReviewById = (req, res) => {
 const deleteReviewById = (req, res) => {
     
 };
+
+const doAddReview = (req, res, location) => {
+    if(!location){
+        return res.status(404).json({message: 'Location not found!'});
+    }
+    const {author, rating, reviewText} = req.body;
+    location.reviews.push({
+        author,
+        rating,
+        reviewText
+    });
+    location.save((err, location) => {
+        if(err){
+            return res.status(400).json(err);
+        }
+    });
+}
 
 module.exports = {
     createReview,
